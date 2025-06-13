@@ -1,6 +1,6 @@
 'use client'
 
-import { useForm } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import {
@@ -14,26 +14,30 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAuthStore } from '@/store/auth'
+import { Loader2 } from 'lucide-react'
 
-export default function LoginPage() {
+type TLoginForm = {
+  email: string
+  password: string
+}
+
+const LoginPage = () => {
   const router = useRouter()
   const { login } = useAuthStore()
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm()
+    formState: { errors, isSubmitting },
+  } = useForm<TLoginForm>()
 
-  const onSubmit = (data: any) => {
-    // Simulate API call
-    setTimeout(() => {
-      // For simplicity, we're not validating credentials, just checking if fields are not empty
-      if (data.email && data.password) {
-        login()
-        localStorage.setItem('mock_auth_token', 'mock_auth_token')
-        router.push('/')
-      }
-    }, 500)
+  const onSubmit: SubmitHandler<TLoginForm> = async (data) => {
+    // Simulate API call by waiting for a promise to resolve
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+
+    // For simplicity, we're not validating credentials, just submitting
+    login()
+    localStorage.setItem('mock_auth_token', 'mock_auth_token')
+    router.push('/')
   }
 
   return (
@@ -57,9 +61,7 @@ export default function LoginPage() {
                   {...register('email', { required: 'Email is required' })}
                 />
                 {errors.email && (
-                  <p className="text-xs text-red-500">
-                    {(errors.email as any).message}
-                  </p>
+                  <p className="text-xs text-red-500">{errors.email.message}</p>
                 )}
               </div>
               <div className="flex flex-col space-y-1.5">
@@ -74,14 +76,17 @@ export default function LoginPage() {
                 />
                 {errors.password && (
                   <p className="text-xs text-red-500">
-                    {(errors.password as any).message}
+                    {errors.password.message}
                   </p>
                 )}
               </div>
             </div>
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
               Sign In
             </Button>
           </CardFooter>
@@ -90,3 +95,5 @@ export default function LoginPage() {
     </div>
   )
 }
+
+export default LoginPage
