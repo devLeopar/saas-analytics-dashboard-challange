@@ -36,7 +36,7 @@ const LoginPage = () => {
 
     // For simplicity, we're not validating credentials, just submitting
     login()
-    localStorage.setItem('mock_auth_token', 'mock_auth_token')
+    document.cookie = 'mock_auth_token=true; path=/; max-age=86400;' // Sets a cookie for 1 day
     router.push('/')
   }
 

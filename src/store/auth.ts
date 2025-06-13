@@ -10,7 +10,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
   isAuth: false,
   login: () => set({ isAuth: true }),
   logout: () => {
-    localStorage.removeItem('mock_auth_token')
+    document.cookie =
+      'mock_auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
     set({ isAuth: false })
   },
 }))
