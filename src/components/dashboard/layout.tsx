@@ -48,8 +48,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div
             className={cn(
-              'flex h-14 items-center border-b lg:h-[60px]',
-              isSidebarCollapsed ? 'justify-center px-2' : 'px-4 lg:px-6',
+              'flex h-14 items-center border-b',
+              isSidebarCollapsed ? 'justify-center px-2' : 'px-4',
             )}
           >
             <Link
@@ -77,7 +77,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </Button>
           </div>
           <div className="flex-1">
-            <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+            <nav className="grid items-start px-2 text-sm font-medium">
               <Link
                 href="/"
                 className="bg-muted text-primary hover:text-primary flex items-center gap-3 rounded-lg px-3 py-2 transition-all"
@@ -95,7 +95,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           isSidebarCollapsed ? 'md:pl-[80px]' : 'md:pl-[280px]',
         )}
       >
-        <header className="bg-background flex h-14 items-center gap-4 border-b px-4 lg:h-[60px] lg:px-6">
+        <header className="bg-background flex h-14 items-center gap-4 border-b px-4">
           <Button
             variant="outline"
             size="icon"
@@ -134,9 +134,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-          {children}
-        </main>
+        <main className="flex flex-1 flex-col gap-4 p-4">{children}</main>
       </div>
       {isMobileSidebarOpen && (
         <div
