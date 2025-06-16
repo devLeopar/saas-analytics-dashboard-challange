@@ -12,17 +12,44 @@ import {
   AreaChart,
   ResponsiveContainer,
   Tooltip,
+  TooltipProps,
   XAxis,
   YAxis,
 } from 'recharts'
 import { AnalyticsData } from '@/hooks/useAnalyticsData'
 import FeedbackControls from './feedback-controls'
+import { formatChartDate, formatTooltipDate } from '@/lib/date-utils'
+import { useDashboardStore } from '@/store/dashboard'
 
 interface ActiveUsersChartProps {
   data: AnalyticsData['activeUsers']
 }
 
+// Custom tooltip component for the chart
+const CustomTooltip = ({
+  active,
+  payload,
+  label,
+}: TooltipProps<number, string>) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-background rounded-md border p-2 shadow-sm">
+        <p className="text-muted-foreground text-xs">
+          {formatTooltipDate(label)}
+        </p>
+        <p className="font-medium">
+          {payload[0].value} <span className="text-xs">active users</span>
+        </p>
+      </div>
+    )
+  }
+
+  return null
+}
+
 const ActiveUsersChart = ({ data }: ActiveUsersChartProps) => {
+  const { timeframe } = useDashboardStore()
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -43,15 +70,21 @@ const ActiveUsersChart = ({ data }: ActiveUsersChartProps) => {
                 <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <XAxis dataKey="timeBucket" />
-            <YAxis />
-            <Tooltip />
+            <XAxis
+              dataKey="timeBucket"
+              tickFormatter={(value) => formatChartDate(value, timeframe)}
+              tick={{ fontSize: 12 }}
+              minTickGap={30}
+            />
+            <YAxis width={30} />
+            <Tooltip content={<CustomTooltip />} />
             <Area
               type="monotone"
               dataKey="value"
               stroke="#8884d8"
               fillOpacity={1}
               fill="url(#colorUv)"
+              name="Active Users"
             />
           </AreaChart>
         </ResponsiveContainer>
