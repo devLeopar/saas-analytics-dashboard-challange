@@ -1,21 +1,22 @@
 'use client'
 
+import * as React from 'react'
 import { ThumbsUp, ThumbsDown } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-const FeedbackControls = () => {
-  const handlePositiveFeedback = () => {
+const FeedbackControls = React.memo(() => {
+  const handlePositiveFeedback = React.useCallback(() => {
     toast.success('Positive feedback received. Thank you!')
-  }
+  }, [])
 
-  const handleNegativeFeedback = () => {
+  const handleNegativeFeedback = React.useCallback(() => {
     toast("We'll work on improving this. Thank you for your feedback!", {
       className: 'bg-amber-50',
     })
-  }
+  }, [])
 
   return (
     <div className="flex items-center gap-2">
@@ -45,6 +46,8 @@ const FeedbackControls = () => {
       </Button>
     </div>
   )
-}
+})
+
+FeedbackControls.displayName = 'FeedbackControls'
 
 export default FeedbackControls
