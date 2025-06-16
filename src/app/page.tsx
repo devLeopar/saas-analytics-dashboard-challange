@@ -8,6 +8,8 @@ import ActiveUsersChart from '@/components/dashboard/active-users-chart'
 import WaitingDurationChart from '@/components/dashboard/waiting-duration-chart'
 import WorkforceUtilizationChart from '@/components/dashboard/workforce-utilization-chart'
 import { useDashboardStore } from '@/store/dashboard'
+import { columns } from '@/components/dashboard/columns'
+import { DataTable } from '@/components/dashboard/data-table'
 
 export default function Home() {
   const { timeframe } = useDashboardStore()
@@ -100,6 +102,11 @@ export default function Home() {
         </div>
         {data && <WaitingDurationChart data={waitingDurationData} />}
         {data && <WorkforceUtilizationChart data={workforceUtilizationData} />}
+      </div>
+      <div className="mt-8">
+        {data && data.sectionData && (
+          <DataTable columns={columns} data={data.sectionData} />
+        )}
       </div>
     </DashboardLayout>
   )
