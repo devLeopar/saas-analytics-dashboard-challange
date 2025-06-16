@@ -59,7 +59,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               onClick={(e) => e.preventDefault()}
             >
               <Package2 className="h-6 w-6" />
-              {!isSidebarCollapsed && <span>SaaS Inc</span>}
+              <span
+                className={cn(
+                  'whitespace-nowrap transition-all duration-300 ease-in-out',
+                  isSidebarCollapsed
+                    ? 'w-0 overflow-hidden opacity-0'
+                    : 'w-auto opacity-100',
+                )}
+              >
+                SaaS Inc
+              </span>
             </Link>
             <Button
               variant="outline"
@@ -84,7 +93,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 className="bg-muted text-primary hover:text-primary flex items-center gap-3 rounded-lg px-3 py-2 transition-all"
               >
                 <Home className="h-4 w-4" />
-                {!isSidebarCollapsed && 'Dashboard'}
+                <span
+                  className={cn(
+                    'whitespace-nowrap transition-all duration-300 ease-in-out',
+                    isSidebarCollapsed
+                      ? 'w-0 overflow-hidden opacity-0'
+                      : 'w-auto opacity-100',
+                  )}
+                >
+                  Dashboard
+                </span>
               </Link>
             </nav>
           </div>
