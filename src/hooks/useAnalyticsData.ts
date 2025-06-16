@@ -32,11 +32,23 @@ export type AnalyticsData = {
 }
 
 const fetchAnalyticsData = async (): Promise<AnalyticsData> => {
-  const res = await fetch('/api/analytics')
-  if (!res.ok) {
-    throw new Error('Failed to fetch analytics data')
+  try {
+    const res = await fetch('/api/analytics', {
+      // Use cache: 'no-cache' to ensure fresh data when needed
+      // The staleTime in useQuery will handle caching on the client side
+      cache: 'default',
+      next: { revalidate: 300 }, // 5 minutes
+    })
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch analytics data: ${res.status}`)
+    }
+
+    return res.json()
+  } catch (error) {
+    console.error('Error fetching analytics data:', error)
+    throw error
   }
-  return res.json()
 }
 
 export function useAnalyticsData() {
@@ -44,5 +56,9 @@ export function useAnalyticsData() {
     queryKey: ['analyticsData'],
     queryFn: fetchAnalyticsData,
     staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 10, // 10 minutes
+    refetchOnWindowFocus: false, // Disable refetching on window focus for better performance
+    retry: 3, // Retry failed requests 3 times
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
   })
 }

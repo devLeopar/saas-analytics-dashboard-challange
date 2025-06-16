@@ -11,12 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useDashboardStore } from '@/store/dashboard'
+import { TimeframeOption, useDashboardStore } from '@/store/dashboard'
 
-export const TimeframeSelector = () => {
+export const TimeframeSelector = React.memo(() => {
   const { timeframe, setTimeframe } = useDashboardStore()
 
-  const handleValueChange = (value: string) => {
+  const handleValueChange = (value: TimeframeOption) => {
     setTimeframe(value)
   }
 
@@ -31,8 +31,11 @@ export const TimeframeSelector = () => {
           <SelectItem value="Last 24 hours">Last 24 hours</SelectItem>
           <SelectItem value="Last 7 days">Last 7 days</SelectItem>
           <SelectItem value="Last 30 days">Last 30 days</SelectItem>
+          <SelectItem value="All time">All time</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
   )
-}
+})
+
+TimeframeSelector.displayName = 'TimeframeSelector'

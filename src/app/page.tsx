@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, lazy, Suspense } from 'react'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 
@@ -10,16 +10,34 @@ import { DataTable } from '@/components/dashboard/data-table'
 import { DashboardLayout } from '@/components/dashboard/layout'
 import { useAnalyticsData } from '@/hooks/useAnalyticsData'
 import { useDashboardStore } from '@/store/dashboard'
-import ActiveUsersChart from '@/components/dashboard/active-users-chart'
-import WaitingDurationChart from '@/components/dashboard/waiting-duration-chart'
-import WorkforceUtilizationChart from '@/components/dashboard/workforce-utilization-chart'
-import FeedbackControls from '@/components/dashboard/feedback-controls'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+
+// Dynamically import chart components to reduce initial bundle size
+const ActiveUsersChart = lazy(
+  () => import('@/components/dashboard/active-users-chart'),
+)
+const WaitingDurationChart = lazy(
+  () => import('@/components/dashboard/waiting-duration-chart'),
+)
+const WorkforceUtilizationChart = lazy(
+  () => import('@/components/dashboard/workforce-utilization-chart'),
+)
+const FeedbackControls = lazy(
+  () => import('@/components/dashboard/feedback-controls'),
+)
+
+// Fallback loading component for Suspense
+const ChartSkeleton = () => (
+  <div className="flex h-[300px] w-full items-center justify-center rounded-md border">
+    <Loader2 className="text-muted-foreground h-8 w-8 animate-spin" />
+  </div>
+)
 
 export default function Home() {
   const { timeframe } = useDashboardStore()
   const { data, isLoading, isError } = useAnalyticsData()
   const isInitialRender = useRef(true)
+  const toastShownRef = useRef(false)
 
   // useRef to prevent toast on initial render, but show on subsequent data refetches
   useEffect(() => {
@@ -28,31 +46,38 @@ export default function Home() {
       return
     }
 
-    if (data) {
+    if (data && !toastShownRef.current) {
       toast('Dashboard data has been updated.')
+      // Set a timeout to reset the toast flag after 5 seconds
+      // This prevents multiple toasts when data updates frequently
+      toastShownRef.current = true
+      setTimeout(() => {
+        toastShownRef.current = false
+      }, 5000)
     }
   }, [data])
 
+  // Memoize data transformations to prevent unnecessary recalculations
   const waitingDurationData = useMemo(() => {
-    return (
-      data?.sectionData.map((section: SectionData) => ({
-        location: section.locationName,
-        averageWaitTime: section.metrics.waitTimeSeconds,
-      })) ?? []
-    )
-  }, [data])
+    if (!data?.sectionData) return []
+
+    return data.sectionData.map((section: SectionData) => ({
+      location: section.locationName,
+      averageWaitTime: section.metrics.waitTimeSeconds,
+    }))
+  }, [data?.sectionData])
 
   const workforceUtilizationData = useMemo(() => {
-    return (
-      data?.sectionData.map((section: SectionData) => ({
-        name: section.locationName,
-        value: section.metrics.workForceUtilization.persons.length,
-      })) ?? []
-    )
-  }, [data])
+    if (!data?.sectionData) return []
+
+    return data.sectionData.map((section: SectionData) => ({
+      name: section.locationName,
+      value: section.metrics.workForceUtilization.persons.length,
+    }))
+  }, [data?.sectionData])
 
   const filteredActiveUsers = useMemo(() => {
-    if (!data || !data.activeUsers || data.activeUsers.length === 0) return []
+    if (!data?.activeUsers || data.activeUsers.length === 0) return []
 
     // To handle mock data in the future, we treat the latest data point as "now".
     const latestDate = new Date(
@@ -89,7 +114,10 @@ export default function Home() {
       const date = new Date(d.timeBucket)
       return date >= startDate
     })
-  }, [data, timeframe])
+  }, [data?.activeUsers, timeframe])
+
+  // Memoize the table data to prevent unnecessary re-renders
+  const tableData = useMemo(() => data?.sectionData || [], [data?.sectionData])
 
   if (isLoading) {
     return (
@@ -118,20 +146,38 @@ export default function Home() {
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         <div className="md:col-span-2">
-          {data && <ActiveUsersChart data={filteredActiveUsers} />}
+          {data && (
+            <Suspense fallback={<ChartSkeleton />}>
+              <ActiveUsersChart data={filteredActiveUsers} />
+            </Suspense>
+          )}
         </div>
-        {data && <WaitingDurationChart data={waitingDurationData} />}
-        {data && <WorkforceUtilizationChart data={workforceUtilizationData} />}
+        {data && (
+          <Suspense fallback={<ChartSkeleton />}>
+            <WaitingDurationChart data={waitingDurationData} />
+          </Suspense>
+        )}
+        {data && (
+          <Suspense fallback={<ChartSkeleton />}>
+            <WorkforceUtilizationChart data={workforceUtilizationData} />
+          </Suspense>
+        )}
       </div>
       <div className="mt-8">
-        {data && data.sectionData && (
+        {data && tableData.length > 0 && (
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Data Table</CardTitle>
-              <FeedbackControls />
+              <Suspense
+                fallback={
+                  <div className="bg-muted h-8 w-20 animate-pulse rounded-md" />
+                }
+              >
+                <FeedbackControls />
+              </Suspense>
             </CardHeader>
             <CardContent>
-              <DataTable columns={columns} data={data.sectionData} />
+              <DataTable columns={columns} data={tableData} />
             </CardContent>
           </Card>
         )}
