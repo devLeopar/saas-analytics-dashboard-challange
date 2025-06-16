@@ -7,8 +7,10 @@ import { Loader2 } from 'lucide-react'
 import ActiveUsersChart from '@/components/dashboard/active-users-chart'
 import WaitingDurationChart from '@/components/dashboard/waiting-duration-chart'
 import WorkforceUtilizationChart from '@/components/dashboard/workforce-utilization-chart'
+import { useDashboardStore } from '@/store/dashboard'
 
 export default function Home() {
+  const { timeframe } = useDashboardStore()
   const { data, isLoading, isError } = useAnalyticsData()
 
   const waitingDurationData = useMemo(() => {
@@ -28,6 +30,44 @@ export default function Home() {
       })) ?? []
     )
   }, [data])
+
+  const filteredActiveUsers = useMemo(() => {
+    if (!data || !data.activeUsers || data.activeUsers.length === 0) return []
+
+    // To handle mock data in the future, we treat the latest data point as "now".
+    const latestDate = new Date(
+      Math.max(
+        ...data.activeUsers.map((d) => new Date(d.timeBucket).getTime()),
+      ),
+    )
+
+    let startDate: Date
+
+    switch (timeframe) {
+      case 'Last 24 hours':
+        startDate = new Date(latestDate)
+        startDate.setHours(startDate.getHours() - 24)
+        break
+      case 'Last 7 days':
+        startDate = new Date(latestDate)
+        startDate.setDate(startDate.getDate() - 6) // Include the latest day in the 7-day period
+        break
+      case 'Last 30 days':
+        startDate = new Date(latestDate)
+        startDate.setDate(startDate.getDate() - 29) // Include the latest day in the 30-day period
+        break
+      default: // 'All time'
+        return data.activeUsers
+    }
+
+    // Set start date to the beginning of the day for an inclusive filter
+    startDate.setHours(0, 0, 0, 0)
+
+    return data.activeUsers.filter((d) => {
+      const date = new Date(d.timeBucket)
+      return date >= startDate
+    })
+  }, [data, timeframe])
 
   if (isLoading) {
     return (
@@ -54,9 +94,9 @@ export default function Home() {
       <div className="flex items-center">
         <h1 className="text-lg font-semibold md:text-2xl">Dashboard</h1>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="md:col-span-2 lg:col-span-3">
-          {data && <ActiveUsersChart data={data.activeUsers} />}
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="md:col-span-2">
+          {data && <ActiveUsersChart data={filteredActiveUsers} />}
         </div>
         {data && <WaitingDurationChart data={waitingDurationData} />}
         {data && <WorkforceUtilizationChart data={workforceUtilizationData} />}

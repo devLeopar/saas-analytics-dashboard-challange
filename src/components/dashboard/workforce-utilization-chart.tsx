@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import {
   Card,
   CardContent,
@@ -65,4 +66,4 @@ const WorkforceUtilizationChart = ({
   )
 }
 
-export default WorkforceUtilizationChart
+export default React.memo(WorkforceUtilizationChart)

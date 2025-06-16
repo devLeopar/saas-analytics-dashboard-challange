@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import {
   Card,
   CardContent,
@@ -62,4 +63,4 @@ const WaitingDurationChart = ({ data }: WaitingDurationChartProps) => {
   )
 }
 
-export default WaitingDurationChart
+export default React.memo(WaitingDurationChart)

@@ -16,6 +16,7 @@ import { useAuthStore } from '@/store/auth'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { TimeframeSelector } from './timeframe-selector'
 
 type DashboardLayoutProps = {
   children: React.ReactNode
@@ -108,6 +109,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="w-full flex-1">
             {/* Can add a search form here if needed */}
           </div>
+          <TimeframeSelector />
           <DropdownMenu>
             <DropdownMenuTrigger className="cursor-pointer" asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
