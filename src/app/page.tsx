@@ -1,23 +1,41 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
+import { toast } from 'sonner'
+import { Loader2 } from 'lucide-react'
+
+import { TimeSeriesDataPoint, SectionData } from '@/hooks/useAnalyticsData'
+import { columns } from '@/components/dashboard/columns'
+import { DataTable } from '@/components/dashboard/data-table'
 import { DashboardLayout } from '@/components/dashboard/layout'
 import { useAnalyticsData } from '@/hooks/useAnalyticsData'
-import { Loader2 } from 'lucide-react'
+import { useDashboardStore } from '@/store/dashboard'
 import ActiveUsersChart from '@/components/dashboard/active-users-chart'
 import WaitingDurationChart from '@/components/dashboard/waiting-duration-chart'
 import WorkforceUtilizationChart from '@/components/dashboard/workforce-utilization-chart'
-import { useDashboardStore } from '@/store/dashboard'
-import { columns } from '@/components/dashboard/columns'
-import { DataTable } from '@/components/dashboard/data-table'
+import FeedbackButton from '@/components/dashboard/feedback-button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function Home() {
   const { timeframe } = useDashboardStore()
   const { data, isLoading, isError } = useAnalyticsData()
+  const isInitialRender = useRef(true)
+
+  // useRef to prevent toast on initial render, but show on subsequent data refetches
+  useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false
+      return
+    }
+
+    if (data) {
+      toast('Dashboard data has been updated.')
+    }
+  }, [data])
 
   const waitingDurationData = useMemo(() => {
     return (
-      data?.sectionData.map((section) => ({
+      data?.sectionData.map((section: SectionData) => ({
         location: section.locationName,
         averageWaitTime: section.metrics.waitTimeSeconds,
       })) ?? []
@@ -26,7 +44,7 @@ export default function Home() {
 
   const workforceUtilizationData = useMemo(() => {
     return (
-      data?.sectionData.map((section) => ({
+      data?.sectionData.map((section: SectionData) => ({
         name: section.locationName,
         value: section.metrics.workForceUtilization.persons.length,
       })) ?? []
@@ -39,7 +57,9 @@ export default function Home() {
     // To handle mock data in the future, we treat the latest data point as "now".
     const latestDate = new Date(
       Math.max(
-        ...data.activeUsers.map((d) => new Date(d.timeBucket).getTime()),
+        ...data.activeUsers.map((d: TimeSeriesDataPoint) =>
+          new Date(d.timeBucket).getTime(),
+        ),
       ),
     )
 
@@ -65,7 +85,7 @@ export default function Home() {
     // Set start date to the beginning of the day for an inclusive filter
     startDate.setHours(0, 0, 0, 0)
 
-    return data.activeUsers.filter((d) => {
+    return data.activeUsers.filter((d: TimeSeriesDataPoint) => {
       const date = new Date(d.timeBucket)
       return date >= startDate
     })
@@ -105,7 +125,15 @@ export default function Home() {
       </div>
       <div className="mt-8">
         {data && data.sectionData && (
-          <DataTable columns={columns} data={data.sectionData} />
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Data Table</CardTitle>
+              <FeedbackButton />
+            </CardHeader>
+            <CardContent>
+              <DataTable columns={columns} data={data.sectionData} />
+            </CardContent>
+          </Card>
         )}
       </div>
     </DashboardLayout>

@@ -16,6 +16,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import FeedbackButton from './feedback-button'
 
 interface WaitingDurationChartProps {
   data: {
@@ -27,11 +28,15 @@ interface WaitingDurationChartProps {
 const WaitingDurationChart = ({ data }: WaitingDurationChartProps) => {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Average Wait Time by Location</CardTitle>
-        <CardDescription>
-          A bar chart showing the average waiting time in seconds per location.
-        </CardDescription>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <div>
+          <CardTitle>Average Wait Time by Location</CardTitle>
+          <CardDescription>
+            A bar chart showing the average waiting time in seconds per
+            location.
+          </CardDescription>
+        </div>
+        <FeedbackButton />
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>

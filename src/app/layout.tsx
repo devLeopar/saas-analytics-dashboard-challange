@@ -3,6 +3,8 @@ import QueryProvider from '@/components/query-provider'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
+import { Toaster } from '@/components/ui/sonner'
+import { cn } from '@/lib/utils'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,12 +29,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={cn(
+          'bg-background min-h-screen font-sans antialiased',
+          geistSans.variable,
+          geistMono.variable,
+        )}
       >
         <QueryProvider>
           <AuthHydration />
           {children}
         </QueryProvider>
+        <Toaster />
       </body>
     </html>
   )

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-type TimeSeriesDataPoint = {
+export type TimeSeriesDataPoint = {
   timeBucket: string
   value: number
 }
@@ -21,7 +21,7 @@ type SectionMetrics = {
   workForceUtilization: WorkForceUtilization
 }
 
-type SectionData = {
+export type SectionData = {
   locationName: string
   metrics: SectionMetrics
 }
