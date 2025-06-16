@@ -17,6 +17,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { TimeframeSelector } from './timeframe-selector'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 type DashboardLayoutProps = {
   children: React.ReactNode
@@ -128,6 +129,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             {/* Can add a search form here if needed */}
           </div>
           <TimeframeSelector />
+          <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger className="cursor-pointer" asChild>
               <Button variant="secondary" size="icon" className="rounded-full">

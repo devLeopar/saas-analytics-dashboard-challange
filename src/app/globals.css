@@ -57,6 +57,45 @@
     @apply bg-background text-foreground;
     font-family: Arial, Helvetica, sans-serif;
   }
+
+  Theme transition effect :root {
+    --theme-transition-duration: 0.05s;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  html {
+    color-scheme: light;
+  }
+
+  body,
+  .bg-background,
+  .bg-card,
+  .bg-popover,
+  .bg-primary,
+  .bg-secondary,
+  .bg-muted,
+  .bg-accent,
+  .border-border,
+  .text-foreground,
+  .text-primary,
+  .text-secondary,
+  .text-muted,
+  .text-accent,
+  .text-destructive,
+  .fill-foreground,
+  .fill-primary,
+  .stroke-foreground,
+  .stroke-primary {
+    transition:
+      background-color var(--theme-transition-duration) ease-in-out,
+      border-color var(--theme-transition-duration) ease-in-out,
+      color var(--theme-transition-duration) ease-in-out,
+      fill var(--theme-transition-duration) ease-in-out,
+      stroke var(--theme-transition-duration) ease-in-out;
+  }
 }
 
 @theme inline {

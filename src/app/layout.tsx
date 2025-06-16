@@ -1,5 +1,6 @@
 import { AuthHydration } from '@/components/auth-hydration'
 import QueryProvider from '@/components/query-provider'
+import { ThemeProvider } from '@/components/theme-provider'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
@@ -27,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
           'bg-background min-h-screen font-sans antialiased',
@@ -35,11 +36,13 @@ export default function RootLayout({
           geistMono.variable,
         )}
       >
-        <QueryProvider>
-          <AuthHydration />
-          {children}
-        </QueryProvider>
-        <Toaster />
+        <ThemeProvider>
+          <QueryProvider>
+            <AuthHydration />
+            {children}
+          </QueryProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   )
