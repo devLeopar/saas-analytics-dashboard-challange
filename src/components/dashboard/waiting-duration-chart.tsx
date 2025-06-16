@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useId } from 'react'
 import {
   Card,
   CardContent,
@@ -26,8 +26,12 @@ interface WaitingDurationChartProps {
 }
 
 const WaitingDurationChart = ({ data }: WaitingDurationChartProps) => {
+  const tableId = useId()
+  const figureLabel =
+    'Bar chart showing the average waiting time in seconds per location.'
+
   return (
-    <Card>
+    <Card role="figure" aria-label={figureLabel} aria-describedby={tableId}>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
           <CardTitle>Average Wait Time by Location</CardTitle>
@@ -63,6 +67,25 @@ const WaitingDurationChart = ({ data }: WaitingDurationChartProps) => {
             />
           </BarChart>
         </ResponsiveContainer>
+        <div className="sr-only">
+          <table id={tableId}>
+            <caption>Average Wait Time Data</caption>
+            <thead>
+              <tr>
+                <th>Location</th>
+                <th>Average Wait Time (seconds)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((entry) => (
+                <tr key={entry.location}>
+                  <td>{entry.location}</td>
+                  <td>{entry.averageWaitTime}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </CardContent>
     </Card>
   )

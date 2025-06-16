@@ -11,6 +11,7 @@ import { DashboardLayout } from '@/components/dashboard/layout'
 import { useAnalyticsData } from '@/hooks/useAnalyticsData'
 import { useDashboardStore } from '@/store/dashboard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { ChartSkeleton } from '@/components/dashboard/chart-skeleton'
 
 // Dynamically import chart components to reduce initial bundle size
 const ActiveUsersChart = lazy(
@@ -24,13 +25,6 @@ const WorkforceUtilizationChart = lazy(
 )
 const FeedbackControls = lazy(
   () => import('@/components/dashboard/feedback-controls'),
-)
-
-// Fallback loading component for Suspense
-const ChartSkeleton = () => (
-  <div className="flex h-[300px] w-full items-center justify-center rounded-md border">
-    <Loader2 className="text-muted-foreground h-8 w-8 animate-spin" />
-  </div>
 )
 
 export default function Home() {
@@ -165,7 +159,11 @@ export default function Home() {
       </div>
       <div className="mt-8">
         {data && tableData.length > 0 && (
-          <Card>
+          <Card
+            role="figure"
+            aria-label="Data Table"
+            aria-describedby="data-table-caption"
+          >
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Data Table</CardTitle>
               <Suspense
@@ -177,7 +175,11 @@ export default function Home() {
               </Suspense>
             </CardHeader>
             <CardContent>
-              <DataTable columns={columns} data={tableData} />
+              <DataTable
+                columns={columns}
+                data={tableData}
+                captionId="data-table-caption"
+              />
             </CardContent>
           </Card>
         )}

@@ -15,7 +15,7 @@ interface DashboardStore {
 export const useDashboardStore = create<DashboardStore>()(
   persist(
     (set) => ({
-      timeframe: 'Last 24 hours',
+      timeframe: 'Last 30 days',
       setTimeframe: (timeframe: TimeframeOption) => set({ timeframe }),
     }),
     {

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useId } from 'react'
 import {
   Card,
   CardContent,
@@ -50,6 +50,8 @@ CustomTooltip.displayName = 'CustomTooltip'
 
 const ActiveUsersChart = ({ data }: ActiveUsersChartProps) => {
   const { timeframe } = useDashboardStore()
+  const tableId = useId()
+  const figureLabel = 'Area chart showing the number of active users over time.'
 
   // Memoize the chart configuration to prevent unnecessary re-renders
   const chartConfig = useMemo(() => {
@@ -81,7 +83,7 @@ const ActiveUsersChart = ({ data }: ActiveUsersChartProps) => {
   }, [timeframe])
 
   return (
-    <Card>
+    <Card role="figure" aria-label={figureLabel} aria-describedby={tableId}>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
           <CardTitle>Active Users</CardTitle>
@@ -113,6 +115,25 @@ const ActiveUsersChart = ({ data }: ActiveUsersChartProps) => {
             />
           </AreaChart>
         </ResponsiveContainer>
+        <div className="sr-only">
+          <table id={tableId}>
+            <caption>Active Users Data</caption>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Active Users</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((entry) => (
+                <tr key={entry.timeBucket}>
+                  <td>{formatTooltipDate(entry.timeBucket)}</td>
+                  <td>{entry.value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </CardContent>
     </Card>
   )

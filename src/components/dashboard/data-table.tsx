@@ -24,13 +24,16 @@ import { Button } from '@/components/ui/button'
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  captionId?: string
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  captionId,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
+  const [rowSelection, setRowSelection] = React.useState({})
 
   // Memoize data to prevent unnecessary re-renders
   const memoizedData = React.useMemo(() => data, [data])
@@ -120,6 +123,11 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="rounded-md border">
         <Table>
+          {captionId && (
+            <caption id={captionId} className="sr-only">
+              Detailed breakdown of key metrics for each location.
+            </caption>
+          )}
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>

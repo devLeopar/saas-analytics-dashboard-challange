@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useId } from 'react'
 import {
   Card,
   CardContent,
@@ -30,8 +30,11 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
 const WorkforceUtilizationChart = ({
   data,
 }: WorkforceUtilizationChartProps) => {
+  const tableId = useId()
+  const figureLabel = 'Pie chart showing the workforce utilization per section.'
+
   return (
-    <Card>
+    <Card role="figure" aria-label={figureLabel} aria-describedby={tableId}>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
           <CardTitle>Workforce Utilization</CardTitle>
@@ -65,6 +68,25 @@ const WorkforceUtilizationChart = ({
             <Legend />
           </PieChart>
         </ResponsiveContainer>
+        <div className="sr-only">
+          <table id={tableId}>
+            <caption>Workforce Utilization Data</caption>
+            <thead>
+              <tr>
+                <th>Section</th>
+                <th>Staff Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((entry) => (
+                <tr key={entry.name}>
+                  <td>{entry.name}</td>
+                  <td>{entry.value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </CardContent>
     </Card>
   )
