@@ -16,7 +16,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import FeedbackButton from './feedback-button'
+import FeedbackControls from './feedback-controls'
 
 interface WaitingDurationChartProps {
   data: {
@@ -36,7 +36,7 @@ const WaitingDurationChart = ({ data }: WaitingDurationChartProps) => {
             location.
           </CardDescription>
         </div>
-        <FeedbackButton />
+        <FeedbackControls />
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>

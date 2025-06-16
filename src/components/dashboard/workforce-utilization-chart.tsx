@@ -16,7 +16,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from 'recharts'
-import FeedbackButton from './feedback-button'
+import FeedbackControls from './feedback-controls'
 
 interface WorkforceUtilizationChartProps {
   data: {
@@ -39,7 +39,7 @@ const WorkforceUtilizationChart = ({
             A pie chart showing the workforce utilization per section.
           </CardDescription>
         </div>
-        <FeedbackButton />
+        <FeedbackControls />
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>

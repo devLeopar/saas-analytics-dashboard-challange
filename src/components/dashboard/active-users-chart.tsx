@@ -16,7 +16,7 @@ import {
   YAxis,
 } from 'recharts'
 import { AnalyticsData } from '@/hooks/useAnalyticsData'
-import FeedbackButton from './feedback-button'
+import FeedbackControls from './feedback-controls'
 
 interface ActiveUsersChartProps {
   data: AnalyticsData['activeUsers']
@@ -32,7 +32,7 @@ const ActiveUsersChart = ({ data }: ActiveUsersChartProps) => {
             A chart showing the number of active users over time.
           </CardDescription>
         </div>
-        <FeedbackButton />
+        <FeedbackControls />
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>

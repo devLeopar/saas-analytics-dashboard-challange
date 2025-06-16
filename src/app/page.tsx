@@ -13,7 +13,7 @@ import { useDashboardStore } from '@/store/dashboard'
 import ActiveUsersChart from '@/components/dashboard/active-users-chart'
 import WaitingDurationChart from '@/components/dashboard/waiting-duration-chart'
 import WorkforceUtilizationChart from '@/components/dashboard/workforce-utilization-chart'
-import FeedbackButton from '@/components/dashboard/feedback-button'
+import FeedbackControls from '@/components/dashboard/feedback-controls'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function Home() {
@@ -128,7 +128,7 @@ export default function Home() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Data Table</CardTitle>
-              <FeedbackButton />
+              <FeedbackControls />
             </CardHeader>
             <CardContent>
               <DataTable columns={columns} data={data.sectionData} />
