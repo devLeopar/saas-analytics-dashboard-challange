@@ -59,7 +59,7 @@ const WaitingDurationChart = ({ data }: WaitingDurationChartProps) => {
               axisLine={false}
               tickFormatter={(value) => `${value}s`}
             />
-            <Tooltip />
+            <Tooltip cursor={{ fill: 'transparent' }} />
             <Bar
               dataKey="averageWaitTime"
               fill="#8884d8"
