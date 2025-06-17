@@ -67,7 +67,13 @@ To start the development server, run the following command:
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the application. The login page will be the first thing you see. Use any credentials to "log in".
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
+> **Note:** The application uses a mock authentication system. You can use any email and password to log in.
+
+For example:
+Email: test@test.com
+Password: 123123
 
 ## Project Structure
 
