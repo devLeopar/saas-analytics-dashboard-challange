@@ -10,6 +10,7 @@
     "test": "vitest",
     "test:e2e": "playwright test",
     "prepare": "husky",
+    "postinstall": "npx playwright install --with-deps",
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
