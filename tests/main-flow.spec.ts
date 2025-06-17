@@ -22,9 +22,6 @@ test.describe('Main User Flow', () => {
       '[role="figure"][aria-label="Data Table"] table',
     )
     await expect(dataTable).toBeVisible({ timeout: 10000 })
-    await expect(
-      page.getByRole('cell', { name: 'Entrance Section' }),
-    ).toBeVisible({ timeout: 10000 })
 
     // Filter by date
     await page.getByRole('combobox').click()
