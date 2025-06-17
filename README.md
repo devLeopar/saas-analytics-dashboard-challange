@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SaaS Analytics Dashboard
+
+A modern, responsive, and feature-rich analytics dashboard built with Next.js and the latest web technologies. This project serves as a demonstration of building a complex, production-quality front-end application.
+
+## Overview
+
+This project is a comprehensive SaaS analytics dashboard designed to showcase modern front-end development practices. It features a secure authentication flow, a responsive layout, interactive and filterable data visualizations, a detailed data table, and a themeable UI with light and dark modes. The application is built with a focus on code quality, performance, and accessibility, and it includes a full suite of unit, integration, and end-to-end tests.
+
+## Key Features
+
+- **Authentication**: Mock cookie-based authentication with protected routes.
+- **Responsive Dashboard**: A fully responsive layout with a collapsible sidebar for all screen sizes.
+- **Interactive Charts**: Data visualizations built with Recharts, including area, bar, and pie charts.
+- **Data Filtering**: Client-side filtering of data by a selectable timeframe (e.g., Last 24 hours, 7 days, 30 days).
+- **Data Table**: A sortable and paginated data table built with TanStack Table.
+- **Dark Mode**: A beautiful, themeable UI with light/dark mode support, respecting user's system preference.
+- **User Notifications**: Toast notifications for user feedback and application events using Sonner.
+- **Performance Optimized**: Built with performance in mind, using techniques like code-splitting, lazy loading, and memoization.
+- **Accessibility (a11y)**: Enhanced for accessibility with semantic HTML, ARIA attributes, and focus management.
+- **Comprehensive Testing**: Includes unit & integration tests with Vitest and end-to-end tests with Playwright.
+
+## Technology Stack
+
+- **Framework**: [Next.js](https://nextjs.org/) (with App Router)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **UI Components**: [Shadcn/UI](https://ui.shadcn.com/)
+- **Charting**: [Recharts](https://recharts.org/)
+- **State Management**: [Zustand](https://zustand-demo.pmnd.rs/)
+- **Data Fetching**: [TanStack Query (React Query)](https://tanstack.com/query/latest)
+- **Data Table**: [TanStack Table (React Table)](https://tanstack.com/table/v8)
+- **Unit & Integration Testing**: [Vitest](https://vitest.dev/) & [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+- **End-to-End Testing**: [Playwright](https://playwright.dev/)
+- **Linting & Formatting**: ESLint & Prettier
 
 ## Getting Started
 
-First, run the development server:
+Follow these instructions to get the project set up and running on your local machine.
+
+### Prerequisites
+
+Make sure you have the following software installed:
+
+- [Node.js](https://nodejs.org/en) (v20 or later recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+### Installation
+
+1.  Clone the repository to your local machine:
+    ```bash
+    git clone https://github.com/devLeopar/saas-analytics-dashboard-challange.git
+    ```
+2.  Navigate into the project directory:
+    ```bash
+    cd saas-analytics-dashboard-challange
+    ```
+3.  Install the project dependencies:
+    ```bash
+    npm install
+    ```
+
+### Running the Development Server
+
+To start the development server, run the following command:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the application. The login page will be the first thing you see. Use any credentials to "log in".
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Here is a brief overview of the key directories in the project:
 
-## Learn More
+- `src/app/`: Contains the core application routes, including the main dashboard page (`page.tsx`) and the login page (`login/page.tsx`).
+- `src/components/`: Contains all the React components, organized into subdirectories for UI elements (`ui/`) and dashboard-specific components (`dashboard/`).
+- `src/hooks/`: Home to custom React hooks, such as `useAnalyticsData.ts` for data fetching.
+- `src/store/`: Contains Zustand state management stores (`auth.ts`, `dashboard.ts`).
+- `src/lib/`: Includes utility functions, such as `utils.ts` from Shadcn and custom date formatting helpers in `date-utils.ts`.
+- `src/api/`: Contains API route handlers.
+- `tests/`: Contains the end-to-end tests written with Playwright.
+- `*.test.tsx`: Unit and integration tests are co-located with the files they are testing.
 
-To learn more about Next.js, take a look at the following resources:
+## Testing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project includes a comprehensive suite of tests to ensure code quality and stability.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Unit & Integration Tests
 
-## Deploy on Vercel
+To run the unit and integration tests with Vitest, use the following command:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm test
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### End-to-End Tests
+
+The E2E tests are written with Playwright and simulate real user flows. To run them, use the following command:
+
+```bash
+npm run test:e2e
+```
+
+This will start the development server and run the Playwright tests in a headless browser.
