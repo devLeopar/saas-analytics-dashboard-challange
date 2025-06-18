@@ -109,3 +109,24 @@ npm run test:e2e
 ```
 
 This will start the development server and run the Playwright tests in a headless browser.
+
+### Troubleshooting
+
+#### Playwright: `Bus error: 10` on macOS (WebKit fails to launch)
+
+If the Playwright tests fail specifically for the `webkit` browser on macOS with a `Bus error: 10`, it usually indicates a corrupted browser installation.
+
+**Quick Fix:**
+
+The most effective solution is to clear the Playwright browser cache and reinstall the browsers. Run the following commands in your terminal:
+
+1.  **Clear the cache:**
+    ```bash
+    npx playwright install --clear
+    ```
+2.  **Reinstall browsers and dependencies:**
+    ```bash
+    npx playwright install --with-deps
+    ```
+
+This two-step process resolves the issue in most cases by ensuring you have a clean and complete installation of the browsers.
